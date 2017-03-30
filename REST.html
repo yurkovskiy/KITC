@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>AJAX</title>
+</head>
+<body>
+
+<button id="btn_get">GET</button>
+<button id="btn_post">POST</button>
+
+<div id="main"></div>
+
+
+<script type="text/javascript">
+btn_get.addEventListener("click", function() {
+	var XHR = new XMLHttpRequest();
+	XHR.open("GET", "REST.php", true);
+	XHR.send();
+	XHR.onreadystatechange = function() {
+		if ((XHR.readyState === 4) && (XHR.status === 200)) {
+			var container = document.getElementById("main");
+			var main_ul = document.createElement("ul");
+			var data = JSON.parse(XHR.responseText);
+			for (var i = 0;i < data.length;i++) {
+				var main_li = document.createElement("li");
+				var ul = document.createElement("ul");
+				for (key in data[i]) {
+					var li = document.createElement("li");
+					li.innerHTML = "<span>" + data[i][key] + "</span>";
+					ul.appendChild(li);
+				}
+				main_li.appendChild(ul);
+				main_ul.appendChild(main_li);
+			}
+			container.appendChild(main_ul);
+		}
+	}
+}, false);
+
+btn_post.addEventListener("click", function() {
+	var XHR = new XMLHttpRequest();
+	XHR.open("POST", "REST.php", true);
+	var data = {name: "Телевізори_" + Math.random(), description: "Телевізори"};
+	XHR.setRequestHeader("Content-type", "application/json;charset=utf-8");
+	XHR.send(JSON.stringify(data));
+	XHR.onreadystatechange = function() {
+		if ((XHR.readyState === 4) && (XHR.status === 200)) {
+			console.log(XHR.responseText);
+		}
+	}
+}, false);
+</script> 
+
+
+<script type="text/javascript">
+
+</script>
+
+</body>
+</html>
